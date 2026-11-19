@@ -24,6 +24,11 @@ body. A `401` includes `WWW-Authenticate: Lightstep realm="collector"`.
 Clients must still put their access token in the report. This receiver does not
 add token validation or change the report authentication format.
 
+The Thrift endpoints (`/api/v0/reports` and `/_rpc/v1/reports/binary`) return
+`400` for a report that has no `runtime`, a null entry in a list used by
+conversion, or a span without `oldest_micros` or `youngest_micros`. The response
+errors name the missing field. These reports are not sent to the next consumer.
+
 ### Tracer metrics processing
 Lighstep tracer reports various client side metrics as `client-drop-spans` via traces payload, these metrics are extracted and reported by collector standard metrics reporting pipeline and available for scraping as `lightstep_receiver_client_spans_dropped`
 
